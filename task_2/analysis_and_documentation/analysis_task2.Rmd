@@ -56,14 +56,17 @@ cakes %>%
   summarise(num_ingredients_teaspoon_mis = n())
 ```
 
+###  4.Which cake has the most unique ingredients?
 
 
 
 ```{r}
-
+cakes %>% 
+  group_by(ingredient)
 ```
 
 
+###  5.Which ingredients are used only once?
 
 
 
