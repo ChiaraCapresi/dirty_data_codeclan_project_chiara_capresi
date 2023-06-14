@@ -1752,18 +1752,43 @@ display: none;
 
 
 <!-- rnb-text-begin -->
-<div id="task-2-cake-ingredients" class="section level1">
-<h1>Task 2: Cake ingredients</h1>
-<div id="analysis-file" class="section level2">
-<h2>Analysis file</h2>
-<p>In this file I am going to analyse some characteristics of the data.
-I will start answering to the following questions:</p>
-<p>1.Which cake has the most cocoa in it? 2.For sponge cake, how many
-cups of ingredients are used in total? 3.How many ingredients are
-measured in teaspoons? 4.Which cake has the most unique ingredients?
-5.Which ingredients are used only once?</p>
-<p>First of all I will read the cleaned dataset I created in the .R
-script.</p>
+<div id="analysis-of-the-candy-data-files." class="section level1">
+<h1>Analysis of the Candy data files.</h1>
+<p>At a first sight it appears clear that the three data files are quite
+confusing. The names of the columns are not clean and also the structure
+of the tables doesn’t facilitate analysis.</p>
+<div id="files-content" class="section level2">
+<h2>File’s content:</h2>
+<p>All the three files seems to include data about a certain sample of
+people and their appreciation/or not of each type of candy.</p>
+<p>However, the three tables have not the same columns, so, some data
+are missing for each year.</p>
+<p>1.4.2 Analysis questions</p>
+<ol style="list-style-type: decimal">
+<li>What is the total number of candy ratings given across the three
+years. (Number of candy ratings, not the number of raters. Don’t count
+missing values)</li>
+<li>What was the average age of people who are going out trick or
+treating?</li>
+<li>What was the average age of people who are not going trick or
+treating?</li>
+<li>For each of joy, despair and meh, which candy bar received the most
+of these ratings?</li>
+<li>How many people rated Starburst as despair?</li>
+</ol>
+<p>For the next three questions, count despair as -1, joy as +1, and meh
+as 0.</p>
+<ol start="6" style="list-style-type: decimal">
+<li>What was the most popular candy bar by this rating system for each
+gender in the dataset ?</li>
+<li>What was the most popular candy bar in each year?</li>
+<li>What was the most popular candy bar by this rating for people in US,
+Canada, UK, and all other countries?</li>
+</ol>
+</div>
+</div>
+<div id="lets-start-reading-our-data" class="section level1">
+<h1>Let’s start reading our data</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5gYGAifQ== -->
@@ -1773,112 +1798,165 @@ script.</p>
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2FrZXMgPC0gcmVhZF9jc3YoaGVyZTo6aGVyZShcImNsZWFuX2RhdGEvY2FrZXMuY3N2XCIpKVxuYGBgIn0= -->
-<pre class="r"><code>cakes &lt;- read_csv(here::here(&quot;clean_data/cakes.csv&quot;))</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYW5fY2FuZGllc18yMDE1IDwtIHJlYWRfY3N2KGhlcmU6OmhlcmUoXCJjbGVhbl9kYXRhL2NsZWFuX2NhbmRpZXMtMjAxNS5jc3ZcIikpXG5gYGAifQ== -->
+<pre class="r"><code>clean_candies_2015 &lt;- read_csv(here::here(&quot;clean_data/clean_candies-2015.csv&quot;))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiUm93czogMTU2IENvbHVtbnM6IDXilIDilIAgQ29sdW1uIHNwZWNpZmljYXRpb24g4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSAXG5EZWxpbWl0ZXI6IFwiLFwiXG5jaHIgKDQpOiBjYWtlLCBpbmdyZWRpZW50LCBjb2RlLCBtZWFzdXJlXG5kYmwgKDEpOiBkb3NlXG7ihLkgVXNlIGBzcGVjKClgIHRvIHJldHJpZXZlIHRoZSBmdWxsIGNvbHVtbiBzcGVjaWZpY2F0aW9uIGZvciB0aGlzIGRhdGEuXG7ihLkgU3BlY2lmeSB0aGUgY29sdW1uIHR5cGVzIG9yIHNldCBgc2hvd19jb2xfdHlwZXMgPSBGQUxTRWAgdG8gcXVpZXQgdGhpcyBtZXNzYWdlLlxuIn0= -->
-<pre><code>Rows: 156 Columns: 5── Column specification ────────────────────────────────────────────────────────────────────────────────────────────
+<!-- rnb-output-begin eyJkYXRhIjoiUm93czogNTM0ODUwIENvbHVtbnM6IDXilIDilIAgQ29sdW1uIHNwZWNpZmljYXRpb24g4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSAXG5EZWxpbWl0ZXI6IFwiLFwiXG5jaHIgKDMpOiBnb2luZ190cmljaywgY2FuZGllcywgYXBwcmVjaWF0aW9uX3JlbnRhbFxuZGJsICgyKTogeWVhciwgYWdlXG7ihLkgVXNlIGBzcGVjKClgIHRvIHJldHJpZXZlIHRoZSBmdWxsIGNvbHVtbiBzcGVjaWZpY2F0aW9uIGZvciB0aGlzIGRhdGEuXG7ihLkgU3BlY2lmeSB0aGUgY29sdW1uIHR5cGVzIG9yIHNldCBgc2hvd19jb2xfdHlwZXMgPSBGQUxTRWAgdG8gcXVpZXQgdGhpcyBtZXNzYWdlLlxuIn0= -->
+<pre><code>Rows: 534850 Columns: 5── Column specification ────────────────────────────────────────────────────────────────────────────────────────────
 Delimiter: &quot;,&quot;
-chr (4): cake, ingredient, code, measure
-dbl (1): dose
+chr (3): going_trick, candies, appreciation_rental
+dbl (2): year, age
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYW5fY2FuZGllc18yMDE2IDwtIHJlYWRfY3N2KGhlcmU6OmhlcmUoXCJjbGVhbl9kYXRhL2NsZWFuX2NhbmRpZXNfMjAxNi5jc3ZcIikpXG5gYGAifQ== -->
+<pre class="r"><code>clean_candies_2016 &lt;- read_csv(here::here(&quot;clean_data/clean_candies_2016.csv&quot;))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUm93czogMTI3MTU5IENvbHVtbnM6IDjilIDilIAgQ29sdW1uIHNwZWNpZmljYXRpb24g4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSAXG5EZWxpbWl0ZXI6IFwiLFwiXG5jaHIgKDYpOiBnZW5kZXIsIGNvdW50cnksIHN0YXRlLCBnb2luZ190cmljaywgY2FuZGllcywgYXBwcmVjaWF0aW9uX3JlbnRhbFxuZGJsICgyKTogeWVhciwgYWdlXG7ihLkgVXNlIGBzcGVjKClgIHRvIHJldHJpZXZlIHRoZSBmdWxsIGNvbHVtbiBzcGVjaWZpY2F0aW9uIGZvciB0aGlzIGRhdGEuXG7ihLkgU3BlY2lmeSB0aGUgY29sdW1uIHR5cGVzIG9yIHNldCBgc2hvd19jb2xfdHlwZXMgPSBGQUxTRWAgdG8gcXVpZXQgdGhpcyBtZXNzYWdlLlxuIn0= -->
+<pre><code>Rows: 127159 Columns: 8── Column specification ────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: &quot;,&quot;
+chr (6): gender, country, state, going_trick, candies, appreciation_rental
+dbl (2): year, age
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYW5fY2FuZGllc18yMDE3IDwtIHJlYWRfY3N2KGhlcmU6OmhlcmUoXCJjbGVhbl9kYXRhL2NsZWFuX2NhbmRpZXNfMjAxNy5jc3ZcIikpXG5gYGAifQ== -->
+<pre class="r"><code>clean_candies_2017 &lt;- read_csv(here::here(&quot;clean_data/clean_candies_2017.csv&quot;))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUm93czogMjUzMzgwIENvbHVtbnM6IDjilIDilIAgQ29sdW1uIHNwZWNpZmljYXRpb24g4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSAXG5EZWxpbWl0ZXI6IFwiLFwiXG5jaHIgKDYpOiBnZW5kZXIsIGNvdW50cnksIHN0YXRlLCBnb2luZ190cmljaywgY2FuZGllcywgYXBwcmVjaWF0aW9uX3JlbnRhbFxuZGJsICgyKTogeWVhciwgYWdlXG7ihLkgVXNlIGBzcGVjKClgIHRvIHJldHJpZXZlIHRoZSBmdWxsIGNvbHVtbiBzcGVjaWZpY2F0aW9uIGZvciB0aGlzIGRhdGEuXG7ihLkgU3BlY2lmeSB0aGUgY29sdW1uIHR5cGVzIG9yIHNldCBgc2hvd19jb2xfdHlwZXMgPSBGQUxTRWAgdG8gcXVpZXQgdGhpcyBtZXNzYWdlLlxuIn0= -->
+<pre><code>Rows: 253380 Columns: 8── Column specification ────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: &quot;,&quot;
+chr (6): gender, country, state, going_trick, candies, appreciation_rental
+dbl (2): year, age
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<div id="which-cake-has-the-most-cocoa-in-it" class="section level3">
-<h3>1.Which cake has the most cocoa in it?</h3>
+<p>Now I am going to match the three data table together</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2FrZXMgJT4lIFxuICBmaWx0ZXIoaW5ncmVkaWVudCA9PSBcImNvY29hXCIpICU+JSBcbiAgYXJyYW5nZShkZXNjKGRvc2UpKVxuYGBgIn0= -->
-<pre class="r"><code>cakes %&gt;% 
-  filter(ingredient == &quot;cocoa&quot;) %&gt;% 
-  arrange(desc(dose))</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2FuZGllcyA8LSBiaW5kX3Jvd3MoY2xlYW5fY2FuZGllc18yMDE1LCBjbGVhbl9jYW5kaWVzXzIwMTYsIGNhbmR5XzIwMTcpXG5gYGAifQ== -->
+<pre class="r"><code>candies &lt;- bind_rows(clean_candies_2015, clean_candies_2016, candy_2017)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInNwZWNfdGJsX2RmIiwidGJsX2RmIiwidGJsIiwiZGF0YS5mcmFtZSJdLCJucm93IjoyLCJuY29sIjo1LCJzdW1tYXJ5Ijp7IkEgdGliYmxlIjpbIjIgw5cgNSJdfX0sInJkZiI6Ikg0c0lBQUFBQUFBQUJtMVNUVy9DTUF6MVNqTkVKQmphL2tBUGszYWlGM2JZYlI4Z3JraG9rN2lHSm9PS0VLTW1qQjMzSC9kLzZOelNJSWhtS2Vtem4xMzdKWm1ONTBNKzV3RFFncmhGT3lNSTdPTjlNbmdDaUNOeXJpQ0dUdlg5SnZxdVltbjFhVVVOY1RzMUtubkR2VTVHSzh4UUM2Y2FwajlUTWhtcnIxdy8yR1NDS0lOS2xsRyt1SFF1TTZMUjZ4a0M2RlhvNVI1cWUvNGQxaGJVY0NjV1d0a3RvdmtuY2ltS0diRlJ0dmtCYTRKeEp0WmVBcy9Oc2xBeVY4YWRXSlNlalNWYWo5c2JKZXl1VUVHSFRvSDcxSGZwVm1QKzBGYVc1U0VjSmRQQytsRjhrRXZoUlBwWlVEMTVZVWtidHk1SFEwWFIrY1djYnF3SUFqYzdVMDBpQjlscVo5YUR4NnBCVFIrdDIrRG9ETE5qeTZnTXp1aGFtV1Z1dkhhbXhVTHB4dW1SNGxwd3VpM3kwN0Z4aXRyVW9STStqOU5iOFpGYUd4eitBTVgzVDFLUEFnQUEifQ== -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["cake"],"name":[1],"type":["chr"],"align":["left"]},{"label":["ingredient"],"name":[2],"type":["chr"],"align":["left"]},{"label":["code"],"name":[3],"type":["chr"],"align":["left"]},{"label":["dose"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["measure"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"One Bowl Chocolate","2":"cocoa","3":"CA","4":"10.0","5":"tablespoon"},{"1":"Red Devil's Food","2":"cocoa","3":"CA","4":"0.3","5":"tablespoon"}],"options":{"columns":{"min":{},"max":[10],"total":[5]},"rows":{"min":[10],"max":[10],"total":[2]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>The cake with most Cocoa is the ‘One Bowl Chocolate’.</p>
-</div>
-<div id="for-sponge-cake-how-many-cups-of-ingredients-are-used-in-total" class="section level3">
-<h3>2.For sponge cake, how many cups of ingredients are used in
-total?</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2FrZXMgJT4lIFxuICBmaWx0ZXIoY2FrZSA9PSBcIlNwb25nZVwiICYgbWVhc3VyZSA9PSBcImN1cFwiKSAlPiUgXG4gIHN1bW1hcmlzZSh0b3RhbF9pbmdyX2N1cHNfc3BvbmdlID0gc3VtKGRvc2UpKVxuYGBgIn0= -->
-<pre class="r"><code>cakes %&gt;% 
-  filter(cake == &quot;Sponge&quot; &amp; measure == &quot;cup&quot;) %&gt;% 
-  summarise(total_ingr_cups_sponge = sum(dose))</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmlldyhjYW5kaWVzKVxuYGBgIn0= -->
+<pre class="r"><code>view(candies)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6MSwibmNvbCI6MSwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyIxIMOXIDEiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFCbDFReTJyRE1CQmNPMVpMVEpvV0F2a0wrMUlDT2VZUThnR2hoZHlNNHFpdXFib3lra3h5N0pmYldSa0pVZ24yTmRMczd1aTRQNzNucHh3QVpwRE55RE5LZ1gxK0hJb3RRSlpTa1VBR2N4ZHZkTDJhQUlDbGk3c0YrUFB2SVVQK0t3d2xidy9nMmlyTFpkVmlvNnU2NzB4bE9vV05pS2h6cmE1bG9MK1FwWC9rUmpyeGpGcHlFOC9JTDl6eThrc1RuNm9ob2p5cnpyWUtpWlE2RlN3aUp6b0NYbnQwbTF5SytydkhuMkxqQm5qMTRMZEx2RDNrYm1RNitsYk10M29TMkxRb3d1NlNuNFgweFpJVVQ0TExUcmRvZ3hKQ1RUbDlXVUJxSlFNeWFZUGhEbGdPVW1DOEFRQUEifQ== -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#1. What is the total number of candy ratings given across the three
+years. (Number of candy ratings, not the number of raters. Don’t count
+missing values)</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6MywibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyIzIMOXIDIiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFCbDFRUVU3RE1CRGN1REdsa2FncWVBWktKTVFCamowZ2Jsd1FTTDFWSmpVbElxd3J4eFVnY2VEQVAvb0NYc0dkSDlHdzY5cXE1QnppMmJGbnh1UGJxOWw1TVNzQVlBRDVnUDZTSU1qN3UrdnlFaUFYTkdTUXc0alhOOW8rSWNEa21CWFR6UWVmaHVubU02eGZFTDRqN3ppOE9ZWHM5eGpFOTA5aUpsRzk2STdBeEJ2dXlQeGRLeHZ3SWM2dGNnMHVFK0hJbXRjcWlqbEZjSGJmOTM5cFF0MnFMaVpFc2xnb3A2cEhTM3FhdG9sa2FGYXVNVWdpd1QxbElzNXNRa3pXeURkWmxQWFRHcC9Mc3d0TzhQdjdSOGo4USt5eDJHV0tQbmpKNEhXZ2NkbWdqcGR2MVlOdXd6Q215cjV4dGJJTnVsaUYySzV5eHFsNHJxaE5HeGxmRHJiL0JWeDk0TjhCQUFBPSJ9 -->
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["total_ingr_cups_sponge"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"3.5"}],"options":{"columns":{"min":{},"max":[10],"total":[1]},"rows":{"min":[10],"max":[10],"total":[1]},"pages":{}}}
+{"columns":[{"label":["year"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["n_rating"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"2015","2":"478507"},{"1":"2016","2":"118290"},{"1":"2017","2":"175555"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[3]},"pages":{}}}
   </script>
 </div>
 <!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
-<div id="how-many-ingredients-are-measured-in-teaspoons" class="section level3">
-<h3>3.How many ingredients are measured in teaspoons?</h3>
+<div id="what-was-the-average-age-of-people-who-are-going-out-trick-or-treating" class="section level1">
+<h1>2. What was the average age of people who are going out trick or
+treating?</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2FrZXMgJT4lIFxuICBmaWx0ZXIobWVhc3VyZSA9PSBcInRlYXNwb29uXCIpICU+JSBcbiAgZGlzdGluY3QoaW5ncmVkaWVudCkgJT4lIFxuICBzdW1tYXJpc2UobnVtX2luZ3JlZGllbnRzX3RlYXNwb29uX21pcyA9IG4oKSlcbmBgYCJ9 -->
-<pre class="r"><code>cakes %&gt;% 
-  filter(measure == &quot;teaspoon&quot;) %&gt;% 
-  distinct(ingredient) %&gt;% 
-  summarise(num_ingredients_teaspoon_mis = n())</code></pre>
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6MSwibmNvbCI6MSwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyIxIMOXIDEiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFCbDFQU3dyQ01CQ2RmcUswNEE5MzNxRUZjZVBTaFhnQVVYQW5zVVlOMWtUVCtGbDZKWS9rUmRSSlNVQVNtTi9MdkpsNTgrbHFsSzVTQUlnZ2p0QVRUSUVzRjdOc0RCQ0hXQVFRUTJMaUE3LzdOUURRTm5FaVh2enlIdlM4UmlMb2lWV1lkUC9BSHIweFJmZHNiVXdyWGh3OVZxTGtQWGZNRmxyNFJQZkY1NDh2U2xyNTQ5TXQxVFRmS2VSajlmRW9UWG5XWEFva2hVWUE4Y2lCOG9ET1ZaaEx0bGx4dUlwak5qUUxySEN3MXdYVy9uS3pNdnphVWNTT2FqQ3g1NEs1MjB1NllhVXQycWk0RnB5ZkZSZmFLVUcweXJYVTFQV2xoU3dkVW11RHp3L3IrczZBdHdFQUFBPT0ifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["average_age_trick"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"245.5441"}],"options":{"columns":{"min":{},"max":[10],"total":[1]},"rows":{"min":[10],"max":[10],"total":[1]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="what-was-the-average-age-of-people-who-are-not-going-trick-or-treating" class="section level1">
+<h1>3. What was the average age of people who are not going trick or
+treating?</h1>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6MSwibmNvbCI6MSwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyIxIMOXIDEiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFCbDFQU3dyQ01CQ2Qxa2F4NGdmMEdpMklHNWVDNGdGRXdaM0VHalZZRTBualora2hQSWluOFRqV1NVbEFFcGpmeTd5WmVZdlplaFN2WXdDb1FWUkRUekFGc2xyT2t6RkFGR0lSUUFSTkV4LzQzYThBZ0k2SmsybjVmdkZQeTJza2dwNVpnVW52RHh6UUcxUDB3RGJHaE54b3hiT1RSMndxZVU4ZHVZMFdQdEdWK1B3TldVNExmME84bzVxbWU0VjhyTDRlcFNFdm1rdUJwTkJvSUI0NVVCN1F2UXB6eVM3SmpsZHhTb1ptZ2RVTzlyckEybDl1Vm9hbEhVWHNxRG9UQnk2WXV6Mm5XNWJib29PS0s4SHBSWEdoblJKRWkxUkxUVjFmbk1uY0laVTIrUDRBNWExTWc3b0JBQUE9In0= -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["average_age_no_trick"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"39.99758"}],"options":{"columns":{"min":{},"max":[10],"total":[1]},"rows":{"min":[10],"max":[10],"total":[1]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="for-each-of-joy-despair-and-meh-which-candy-bar-received-the-most-of-these-ratings" class="section level1">
+<h1>4. For each of joy, despair and meh, which candy bar received the
+most of these ratings?</h1>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2FuZGllcyAlPiUgXG4gIGZpbHRlcighKGlzLm5hKGFwcHJlY2lhdGlvbl9yZW50YWwpKSkgJT4lIFxuICBncm91cF9ieShhcHByZWNpYXRpb25fcmVudGFsKSAlPiUgXG4gIHN1bW1hcmlzZShudW0gPSBuKCkpICU+JSBcbiAgYXJyYW5nZShkZXNjKG51bSkpXG5gYGAifQ== -->
+<pre class="r"><code>candies %&gt;% 
+  filter(!(is.na(appreciation_rental))) %&gt;% 
+  group_by(appreciation_rental) %&gt;% 
+  summarise(num = n()) %&gt;% 
+  arrange(desc(num))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6MSwibmNvbCI6MSwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyIxIMOXIDEiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFCbDFRd1c3Q01BeDFTek5HSmJaSlhQbUY5aklKOFFGb0g0QkE0bFpsYmVpaXRVNlZwR0pIdmh4d3FrUml5Y0d4WC96OC9MTGZuVDd6VXc0QU04aG1GQm1sd0k2SHIySUxrS1ZVSkpEQnd0MS85THlhQUlDbHYxK2pKb2E4RjRhU2p5ZHdqV05mU1d5MWFLUkFheW9ydUJtVXdxcVhKaHF3ME9wU2hpRk9KYjFTdU5PSmxlcU9tMWdwYjdqbDVWa1RuNnBiUkptcndVcUZSRXFkRHhhUkV4MEI3eU82VFpxaS9obnh0OWc0QWU4Ym52NGcrWjg3eWZUdVJ6RS82a1ZnSzFHRTNUditMVHBmdkpIanlYQTVhSWsyT0NIVWxGWlpIdnJ5V25VQm1iekI3UUVKMnZmMnZnRUFBQT09In0= -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6MywibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyIzIMOXIDIiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFCbDFRUVU3RE1CRGNPSEdyUmlvZzlSM0pnVjY0SXJVSWtCQ29CYW1ja0pzYWlFanR5SEVFTi9nUHgvNmx2NkZoN2RnQ09RZDdkall6cyt2RmJEVk5WeWtBeEpERWVGS0VRQi91TDdJemdJUmdFVUVDSTNOL1lIdUN3SkFudmNJMmhyUDU4dTc4YXVISytQcjIwY09iK1NWZVkvc3ozWDFEc3R0RHhENERaeXJZbGpmT2xUaHl3dXBhOGFKa3VwVGlTWEdoV2VWdFJic05MRVpLdnVmZXh1U1JMenk2cnZzSnM0cUtOVDdMayttR2FaWS9LOVJqZFFna1ExbWJHVkJFelBvMEVFY3FJSTViWVNiWlpNVnJLOTZ5VXhOZzIvMDNkamoraDBrZlNUcG5SWjNWZ0l1WFVuQS9lOFhXM0QvQ0VXNXNGODVyVlFydE4wRzJ5Ylg4ZTZ5MGtKVm43RzV3K0FXalRvSm85UUVBQUE9PSJ9 -->
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["num_ingredients_teaspoon_mis"],"name":[1],"type":["int"],"align":["right"]}],"data":[{"1":"8"}],"options":{"columns":{"min":{},"max":[10],"total":[1]},"rows":{"min":[10],"max":[10],"total":[1]},"pages":{}}}
+{"columns":[{"label":["appreciation_rental"],"name":[1],"type":["chr"],"align":["left"]},{"label":["num"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"DESPAIR","2":"373675"},{"1":"JOY","2":"308182"},{"1":"MEH","2":"90495"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[3]},"pages":{}}}
   </script>
 </div>
 <!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
-<div id="which-cake-has-the-most-unique-ingredients" class="section level3">
-<h3>4.Which cake has the most unique ingredients?</h3>
+<div id="how-many-people-rated-starburst-as-despair" class="section level1">
+<h1>5. How many people rated Starburst as despair?</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImdyb3VwZWRfZGYiLCJ0YmxfZGYiLCJ0YmwiLCJkYXRhLmZyYW1lIl0sIm5yb3ciOjMzLCJuY29sIjoyLCJzdW1tYXJ5Ijp7IkEgdGliYmxlIjpbIjMzIMOXIDIiXSwiR3JvdXBzIjpbImluZ3JlZGllbnQgWzMzXSJdfX0sInJkZiI6Ikg0c0lBQUFBQUFBQUJvVlRVVzdiTUF4VkhMdFozSzNKMEF1b0IwaUFvajg3d0xBRERCdlFYMXBtYkMyeUZFaHkzZXhyTjkxTm10R3VwR2I1MkdCVEZwOUlpbytrdjM1K2ZDZ2ZTOGJZbk9WeldndmFzdUw3dHkrYlQ0emxHU2t6bHJQbCtIMm00MXZhak9DYTVDNGNMQ3JROUxpZ3JvUkY2TGpaY1ErVzNnQmZDOXU3Rm1zdUJRYm9wcmFTQU5GYkM5cEgveVUyRFI5YTZhUFpsZTU5aDAzUWN0S2k2YnVmZzhRS1JCdGRSV3VFVVpCY0MwRTZ4RGlVUVZjbDMvR2FvMUg3eUtKQmNwUTZxSE95RGR2M3psc1lLclNVYmZRdWpnak9SeDZnT3FOcmpzNmhUdXl1VzRTbkk1K3FFU0dGWk1oLzlHODFLRjFyckVjdGRTTG9UQTNwMVBUMnJ4QTN3bmdQRFhMUklyb1U1VFd3bGJvT3lJY0s5aFNUSDh4UVkrekJWZFY3bjdSaWdEY2w3MlFxeGVvSnRGUUtPRDRUY3hGcDVsUXhsNUlFNVZOOTVNNVRIM2VLa2czWXVxR1c5bU1uYXU3NmhxYUFVcHBtWmh5b2YwdjJINW1mU1g0bVJaREZtU3lEck03azQ4VmdGMEtCYzJHb0kxalc0R0c3czlEaGhmblNtbUdyQ1hlQlUvYUxsdFBwOVBzeWJqUmFUNG1IdU5RVWk3VkVIY3MzMDdTOFhQZ3V6TUZMbzhrN3V3MjB6ck9iMlF0ZzNldnh0bm9qMmw3dk4vY1A0MVdobml6a09RdjFqL3ZzOWM3OEZHSVZjVXBRTjFLblgwaEJoU3BPSDNHZldHMFBOR3VSUVVtbzIzcmpJZHFWOUJkR1pDTEhYdjRBdmxPalAyb0VBQUE9In0= -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6MSwibmNvbCI6MSwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyIxIMOXIDEiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFCbDFRU3dyQ01CQWQyMFpwd1ErSXgyZzNJbmdBOFFCK29Mc1MyNmpGbXBRa1JaZmV3N3VxazlxZ0pKRDV2TXlibVpmTktwMUhhUVFBUGdRK1dvSWhrUDF1SFM4QkFnK1RIZ1FRR24vSDUya0xBQXkvdnY5MGlnaW5WNll3bVB5Qk05NWNzNjJtOHRCSXBiT0NxWnFXMG1HR1V0d1N5emJ0dlFlYU54NTNSRjVSNVk2SUNxcHBjcFRJeCt6bFVBYWkxcVhnU1BLTUFPS1FlOUlCeGcwM214UnhmbTc0SlY2WUFaMXcrSW4vL3doenpVanYzYlVpWGFzKzQ2ZVNNN3Q3UlErczZwSVJLbTRGSjdVc3ViWktFRldKRnByYXVpZ1hsVVZhYmZENkFPc2hqVjIzQVFBQSJ9 -->
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["ingredient"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"bananas","2":"1"},{"1":"cream of tartar","2":"1"},{"1":"crushed ice","2":"1"},{"1":"dried currants","2":"1"},{"1":"egg white","2":"1"},{"1":"nutmeg","2":"1"},{"1":"nuts","2":"1"},{"1":"zwiebach","2":"1"},{"1":"chocolate","2":"2"},{"1":"cocoa","2":"2"},{"1":"crumbs","2":"2"},{"1":"egg yolk","2":"2"},{"1":"gelatin","2":"2"},{"1":"rum","2":"2"},{"1":"strawberries","2":"2"},{"1":"yeast","2":"2"},{"1":"almond essence","2":"3"},{"1":"heavy cream","2":"3"},{"1":"lemon juice","2":"3"},{"1":"shortening","2":"4"},{"1":"soda","2":"4"},{"1":"sour cream","2":"4"},{"1":"cottage cheese","2":"5"},{"1":"lemon rind","2":"5"},{"1":"baking powder","2":"7"},{"1":"butter","2":"7"},{"1":"water","2":"7"},{"1":"milk","2":"9"},{"1":"vanilla extract","2":"9"},{"1":"eggs","2":"15"},{"1":"salt","2":"15"},{"1":"sifted flour","2":"15"},{"1":"granulated sugar","2":"17"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[33]},"pages":{}}}
+{"columns":[{"label":["num_Starburst_despair"],"name":[1],"type":["int"],"align":["right"]}],"data":[{"1":"1691"}],"options":{"columns":{"min":{},"max":[10],"total":[1]},"rows":{"min":[10],"max":[10],"total":[1]},"pages":{}}}
   </script>
 </div>
 <!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
-<div id="which-ingredients-are-used-only-once" class="section level3">
-<h3>5.Which ingredients are used only once?</h3>
+<div id="what-was-the-most-popular-candy-bar-by-this-rating-system-for-each-gender-in-the-dataset" class="section level1">
+<h1>6. What was the most popular candy bar by this rating system for
+each gender in the dataset ?</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImdyb3VwZWRfZGYiLCJ0YmxfZGYiLCJ0YmwiLCJkYXRhLmZyYW1lIl0sIm5yb3ciOjgsIm5jb2wiOjIsInN1bW1hcnkiOnsiQSB0aWJibGUiOlsiOCDDlyAyIl0sIkdyb3VwcyI6WyJpbmdyZWRpZW50IFs4XSJdfX0sInJkZiI6Ikg0c0lBQUFBQUFBQUJuMVJ6VTZFTUJBdUxIVVhqRXJpQy9BQ2tCZzkrQURHQnpDYTdMV1VMalRDZE5PV1lEejUySjRXcDlodUlnY0RIV2ErenQvMzhmSzB2OC8yR1NGa1E1SU5Xb291b1crdnorVWpJVW1NUVVRU2tycnZCMTdmb3VQQUhNL09YMnhyQnZnWUg5NXdMZGhRcUVOaG1jYlh3NWRjajZZVFRTRzU4TkIxb3lVQ2ZOU2FnUTMxcVdqYll1cWtEV2tYTU5wQnRENUtNQXFwdTg5SmlwcnhEdjJyWlNPMzdyL25EeVhLZTJhTXB4UEFyR0dXVlFmTkJyRktUN1dhS2tEYytIbnhGNXA1bnIvWGZVTlN2c2psKzBwb3RXaWtBQnNVQlRTblZlMVdIYTFVZ05XeEU1dXV0b3YwQ3NoSGNOT2FrbmNqdkpkM0QyNlU1MHY4bnBIWEp2ang3OHhrOXIxb1VGcEFLeUhvVG50V2l6NzhLK1Mrc0txT1dwNFpaSWlheWlyTFFsN0dWUitRaFJ3NS9RQm4zTnBvWkFJQUFBPT0ifQ== -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["ingredient"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"bananas","2":"1"},{"1":"cream of tartar","2":"1"},{"1":"crushed ice","2":"1"},{"1":"dried currants","2":"1"},{"1":"egg white","2":"1"},{"1":"nutmeg","2":"1"},{"1":"nuts","2":"1"},{"1":"zwiebach","2":"1"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[8]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2FuZGllcyAlPiUgXG4gIHJlY29kZShhcHByZWNpYXRpb25fcmVudGFsLCBcIkRFU1BBSVJcIiA9IC0xLCArMSA9IFwiSk9ZXCIsIDAgPSBcIk1FSFwiKVxuXG5gYGAifQ== -->
+<pre class="r"><code>candies %&gt;% 
+  recode(appreciation_rental, &quot;DESPAIR&quot; = -1, +1 = &quot;JOY&quot;, 0 = &quot;MEH&quot;)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3I6IHVuZXhwZWN0ZWQgJz0nIGluOlxuXCJjYW5kaWVzICU+JSBcbiAgcmVjb2RlKGFwcHJlY2lhdGlvbl9yZW50YWwsIFwiREVTUEFJUlwiID0gLTEsICsxID1cIlxuIn0= -->
+<pre><code>Error: unexpected &#39;=&#39; in:
+&quot;candies %&gt;% 
+  recode(appreciation_rental, &quot;DESPAIR&quot; = -1, +1 =&quot;</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+</div>
+<div id="what-was-the-most-popular-candy-bar-in-each-year" class="section level1">
+<h1>7. What was the most popular candy bar in each year?</h1>
+</div>
+<div id="what-was-the-most-popular-candy-bar-by-this-rating-for-people-in-us-canada-uk-and-all-other-countries" class="section level1">
+<h1>8. What was the most popular candy bar by this rating for people in
+US, Canada, UK, and all other countries?</h1>
 <!-- rnb-text-end -->
-</div>
-</div>
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIFRhc2sgMjogQ2FrZSBpbmdyZWRpZW50cw0KDQojIyBBbmFseXNpcyBmaWxlDQoNCkluIHRoaXMgZmlsZSBJIGFtIGdvaW5nIHRvIGFuYWx5c2Ugc29tZSBjaGFyYWN0ZXJpc3RpY3Mgb2YgdGhlIGRhdGEuIEkgd2lsbCBzdGFydCBhbnN3ZXJpbmcgdG8gdGhlIGZvbGxvd2luZyBxdWVzdGlvbnM6DQoNCg0KIDEuV2hpY2ggY2FrZSBoYXMgdGhlIG1vc3QgY29jb2EgaW4gaXQ/DQogMi5Gb3Igc3BvbmdlIGNha2UsIGhvdyBtYW55IGN1cHMgb2YgaW5ncmVkaWVudHMgYXJlIHVzZWQgaW4gdG90YWw/DQogMy5Ib3cgbWFueSBpbmdyZWRpZW50cyBhcmUgbWVhc3VyZWQgaW4gdGVhc3Bvb25zPw0KIDQuV2hpY2ggY2FrZSBoYXMgdGhlIG1vc3QgdW5pcXVlIGluZ3JlZGllbnRzPw0KIDUuV2hpY2ggaW5ncmVkaWVudHMgYXJlIHVzZWQgb25seSBvbmNlPw0KIA0KIA0KRmlyc3Qgb2YgYWxsIEkgd2lsbCByZWFkIHRoZSBjbGVhbmVkIGRhdGFzZXQgSSBjcmVhdGVkIGluIHRoZSAuUiBzY3JpcHQuDQoNCmBgYHtyfQ0KbGlicmFyeSh0aWR5dmVyc2UpDQpgYGANCg0KYGBge3J9DQpjYWtlcyA8LSByZWFkX2NzdihoZXJlOjpoZXJlKCJjbGVhbl9kYXRhL2Nha2VzLmNzdiIpKQ0KYGBgDQoNCiMjIyAgMS5XaGljaCBjYWtlIGhhcyB0aGUgbW9zdCBjb2NvYSBpbiBpdD8NCg0KYGBge3J9DQpjYWtlcyAlPiUgDQogIGZpbHRlcihpbmdyZWRpZW50ID09ICJjb2NvYSIpICU+JSANCiAgYXJyYW5nZShkZXNjKGRvc2UpKQ0KYGBgDQoNClRoZSBjYWtlIHdpdGggbW9zdCBDb2NvYSBpcyB0aGUgJ09uZSBCb3dsIENob2NvbGF0ZScuDQoNCiMjIyAgMi5Gb3Igc3BvbmdlIGNha2UsIGhvdyBtYW55IGN1cHMgb2YgaW5ncmVkaWVudHMgYXJlIHVzZWQgaW4gdG90YWw/DQoNCg0KYGBge3J9DQpjYWtlcyAlPiUgDQogIGZpbHRlcihjYWtlID09ICJTcG9uZ2UiICYgbWVhc3VyZSA9PSAiY3VwIikgJT4lIA0KICBzdW1tYXJpc2UodG90YWxfaW5ncl9jdXBzX3Nwb25nZSA9IHN1bShkb3NlKSkNCmBgYA0KDQojIyMgIDMuSG93IG1hbnkgaW5ncmVkaWVudHMgYXJlIG1lYXN1cmVkIGluIHRlYXNwb29ucz8NCg0KDQpgYGB7cn0NCmNha2VzICU+JSANCiAgZmlsdGVyKG1lYXN1cmUgPT0gInRlYXNwb29uIikgJT4lIA0KICBkaXN0aW5jdChpbmdyZWRpZW50KSAlPiUgDQogIHN1bW1hcmlzZShudW1faW5ncmVkaWVudHNfdGVhc3Bvb25fbWlzID0gbigpKQ0KYGBgDQoNCiMjIyAgNC5XaGljaCBjYWtlIGhhcyB0aGUgbW9zdCB1bmlxdWUgaW5ncmVkaWVudHM/DQoNCg0KDQpgYGB7cn0NCmNha2VzICU+JSANCiAgZ3JvdXBfYnkoaW5ncmVkaWVudCkgJT4lIA0KICBjb3VudCgpICU+JSANCiAgYXJyYW5nZShuKQ0KYGBgDQoNCg0KIyMjICA1LldoaWNoIGluZ3JlZGllbnRzIGFyZSB1c2VkIG9ubHkgb25jZT8NCg0KDQpgYGB7cn0NCmNha2VzICU+JSANCiAgZ3JvdXBfYnkoaW5ncmVkaWVudCkgJT4lIA0KICBjb3VudCgpICU+JSANCiAgZmlsdGVyKG4gPT0gMSkNCmBgYA0KDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIEFuYWx5c2lzIG9mIHRoZSBDYW5keSBkYXRhIGZpbGVzLg0KDQpBdCBhIGZpcnN0IHNpZ2h0IGl0IGFwcGVhcnMgY2xlYXIgdGhhdCB0aGUgdGhyZWUgZGF0YSBmaWxlcyBhcmUgcXVpdGUgY29uZnVzaW5nLiBUaGUgbmFtZXMgb2YgdGhlIGNvbHVtbnMgYXJlIG5vdCBjbGVhbiBhbmQgYWxzbyB0aGUgc3RydWN0dXJlIG9mIHRoZSB0YWJsZXMgZG9lc24ndCBmYWNpbGl0YXRlIGFuYWx5c2lzLg0KDQojIyBGaWxlJ3MgY29udGVudDoNCg0KQWxsIHRoZSB0aHJlZSBmaWxlcyBzZWVtcyB0byBpbmNsdWRlIGRhdGEgYWJvdXQgYSBjZXJ0YWluIHNhbXBsZSBvZiBwZW9wbGUgYW5kIHRoZWlyIGFwcHJlY2lhdGlvbi9vciBub3Qgb2YgZWFjaCB0eXBlIG9mIGNhbmR5Lg0KDQpIb3dldmVyLCB0aGUgdGhyZWUgdGFibGVzIGhhdmUgbm90IHRoZSBzYW1lIGNvbHVtbnMsIHNvLCBzb21lIGRhdGEgYXJlIG1pc3NpbmcgZm9yIGVhY2ggeWVhci4NCg0KDQoNCg0KMS40LjIgQW5hbHlzaXMgcXVlc3Rpb25zDQoNCiAgIDEuIFdoYXQgaXMgdGhlIHRvdGFsIG51bWJlciBvZiBjYW5keSByYXRpbmdzIGdpdmVuIGFjcm9zcyB0aGUgdGhyZWUgeWVhcnMuIChOdW1iZXIgb2YgY2FuZHkgcmF0aW5ncywgbm90IHRoZSBudW1iZXIgb2YgcmF0ZXJzLiBEb27igJl0IGNvdW50IG1pc3NpbmcgdmFsdWVzKQ0KICAyLiAgV2hhdCB3YXMgdGhlIGF2ZXJhZ2UgYWdlIG9mIHBlb3BsZSB3aG8gYXJlIGdvaW5nIG91dCB0cmljayBvciB0cmVhdGluZz8NCiAgMy4gIFdoYXQgd2FzIHRoZSBhdmVyYWdlIGFnZSBvZiBwZW9wbGUgd2hvIGFyZSBub3QgZ29pbmcgdHJpY2sgb3IgdHJlYXRpbmc/DQogIDQuICBGb3IgZWFjaCBvZiBqb3ksIGRlc3BhaXIgYW5kIG1laCwgd2hpY2ggY2FuZHkgYmFyIHJlY2VpdmVkIHRoZSBtb3N0IG9mIHRoZXNlIHJhdGluZ3M/DQogIDUuICBIb3cgbWFueSBwZW9wbGUgcmF0ZWQgU3RhcmJ1cnN0IGFzIGRlc3BhaXI/DQoNCkZvciB0aGUgbmV4dCB0aHJlZSBxdWVzdGlvbnMsIGNvdW50IGRlc3BhaXIgYXMgLTEsIGpveSBhcyArMSwgYW5kIG1laCBhcyAwLg0KDQogICA2LiBXaGF0IHdhcyB0aGUgbW9zdCBwb3B1bGFyIGNhbmR5IGJhciBieSB0aGlzIHJhdGluZyBzeXN0ZW0gZm9yIGVhY2ggZ2VuZGVyIGluIHRoZSBkYXRhc2V0ID8NCiAgIDcuIFdoYXQgd2FzIHRoZSBtb3N0IHBvcHVsYXIgY2FuZHkgYmFyIGluIGVhY2ggeWVhcj8NCiAgIDguIFdoYXQgd2FzIHRoZSBtb3N0IHBvcHVsYXIgY2FuZHkgYmFyIGJ5IHRoaXMgcmF0aW5nIGZvciBwZW9wbGUgaW4gVVMsIENhbmFkYSwgVUssIGFuZCBhbGwgb3RoZXIgY291bnRyaWVzPw0KICAgDQojIExldCdzIHN0YXJ0IHJlYWRpbmcgb3VyIGRhdGENCg0KDQoNCmBgYHtyfQ0KbGlicmFyeSh0aWR5dmVyc2UpDQpgYGANCg0KYGBge3J9DQpjbGVhbl9jYW5kaWVzXzIwMTUgPC0gcmVhZF9jc3YoaGVyZTo6aGVyZSgiY2xlYW5fZGF0YS9jbGVhbl9jYW5kaWVzLTIwMTUuY3N2IikpDQpjbGVhbl9jYW5kaWVzXzIwMTYgPC0gcmVhZF9jc3YoaGVyZTo6aGVyZSgiY2xlYW5fZGF0YS9jbGVhbl9jYW5kaWVzXzIwMTYuY3N2IikpDQpjbGVhbl9jYW5kaWVzXzIwMTcgPC0gcmVhZF9jc3YoaGVyZTo6aGVyZSgiY2xlYW5fZGF0YS9jbGVhbl9jYW5kaWVzXzIwMTcuY3N2IikpDQpgYGANCk5vdyBJIGFtIGdvaW5nIHRvIG1hdGNoIHRoZSB0aHJlZSBkYXRhIHRhYmxlIHRvZ2V0aGVyDQoNCg0KYGBge3J9DQpjYW5kaWVzIDwtIGJpbmRfcm93cyhjbGVhbl9jYW5kaWVzXzIwMTUsIGNsZWFuX2NhbmRpZXNfMjAxNiwgY2FuZHlfMjAxNykNCmBgYA0KDQoNCmBgYHtyfQ0KdmlldyhjYW5kaWVzKQ0KYGBgDQoNCg0KIzEuIFdoYXQgaXMgdGhlIHRvdGFsIG51bWJlciBvZiBjYW5keSByYXRpbmdzIGdpdmVuIGFjcm9zcyB0aGUgdGhyZWUgeWVhcnMuIChOdW1iZXIgb2YgY2FuZHkgcmF0aW5ncywgbm90IHRoZSBudW1iZXIgb2YgcmF0ZXJzLiBEb27igJl0IGNvdW50IG1pc3NpbmcgdmFsdWVzKQ0KDQoNCg0KYGBge3J9DQpjYW5kaWVzICU+JSANCiAgZ3JvdXBfYnkoeWVhcikgJT4lIA0KICBmaWx0ZXIoIShpcy5uYShhcHByZWNpYXRpb25fcmVudGFsKSkpICU+JSANCiAgc3VtbWFyaXNlKG5fcmF0aW5nID0gbigpKQ0KYGBgDQoNCiMgIDIuICBXaGF0IHdhcyB0aGUgYXZlcmFnZSBhZ2Ugb2YgcGVvcGxlIHdobyBhcmUgZ29pbmcgb3V0IHRyaWNrIG9yIHRyZWF0aW5nPw0KDQoNCg0KYGBge3J9DQpjYW5kaWVzICU+JSANCiAgZmlsdGVyKGdvaW5nX3RyaWNrID09ICJZZXMiKSAlPiUgDQogIHN1bW1hcmlzZShhdmVyYWdlX2FnZV90cmljayA9IG1lYW4oYWdlLCBuYS5ybSA9VFJVRSkpDQpgYGANCg0KDQojICAzLiAgV2hhdCB3YXMgdGhlIGF2ZXJhZ2UgYWdlIG9mIHBlb3BsZSB3aG8gYXJlIG5vdCBnb2luZyB0cmljayBvciB0cmVhdGluZz8NCg0KYGBge3J9DQpjYW5kaWVzICU+JSANCiAgZmlsdGVyKGdvaW5nX3RyaWNrID09ICJObyIpICU+JSANCiAgc3VtbWFyaXNlKGF2ZXJhZ2VfYWdlX25vX3RyaWNrID0gbWVhbihhZ2UsIG5hLnJtID1UUlVFKSkNCmBgYA0KDQojICAgNC4gIEZvciBlYWNoIG9mIGpveSwgZGVzcGFpciBhbmQgbWVoLCB3aGljaCBjYW5keSBiYXIgcmVjZWl2ZWQgdGhlIG1vc3Qgb2YgdGhlc2UgcmF0aW5ncz8NCg0KDQpgYGB7cn0NCmNhbmRpZXMgJT4lIA0KICBmaWx0ZXIoIShpcy5uYShhcHByZWNpYXRpb25fcmVudGFsKSkpICU+JSANCiAgZ3JvdXBfYnkoYXBwcmVjaWF0aW9uX3JlbnRhbCkgJT4lIA0KICBzdW1tYXJpc2UobnVtID0gbigpKSAlPiUgDQogIGFycmFuZ2UoZGVzYyhudW0pKQ0KYGBgDQoNCiMgICA1LiAgSG93IG1hbnkgcGVvcGxlIHJhdGVkIFN0YXJidXJzdCBhcyBkZXNwYWlyPw0KDQpgYGB7cn0NCmNhbmRpZXMgJT4lIA0KICBmaWx0ZXIoY2FuZGllcyA9PSAiU3RhcmJ1cnN0IiAmIGFwcHJlY2lhdGlvbl9yZW50YWwgPT0gIkRFU1BBSVIiKSAlPiUgDQogIHN1bW1hcmlzZShudW1fU3RhcmJ1cnN0X2Rlc3BhaXIgPSBuKCkpDQpgYGANCiMgICA2LiBXaGF0IHdhcyB0aGUgbW9zdCBwb3B1bGFyIGNhbmR5IGJhciBieSB0aGlzIHJhdGluZyBzeXN0ZW0gZm9yIGVhY2ggZ2VuZGVyIGluIHRoZSBkYXRhc2V0ID8NCg0KDQpgYGB7cn0NCmNhbmRpZXMgJT4lIA0KICByZWNvZGUoYXBwcmVjaWF0aW9uX3JlbnRhbCwgIkRFU1BBSVIiID0gLTEsICsxID0gIkpPWSIsIDAgPSAiTUVIIikNCmBgYA0KDQojICAgIDcuIFdoYXQgd2FzIHRoZSBtb3N0IHBvcHVsYXIgY2FuZHkgYmFyIGluIGVhY2ggeWVhcj8NCg0KDQoNCiMgICAgOC4gV2hhdCB3YXMgdGhlIG1vc3QgcG9wdWxhciBjYW5keSBiYXIgYnkgdGhpcyByYXRpbmcgZm9yIHBlb3BsZSBpbiBVUywgQ2FuYWRhLCBVSywgYW5kIGFsbCBvdGhlciBjb3VudHJpZXM/DQoNCg0KDQoNCg0KDQo=</div>
 
 
 
@@ -1925,7 +2003,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("analysis_task2.Rmd");
+  window.initializeSourceEmbed("candies_task4_analysis.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>

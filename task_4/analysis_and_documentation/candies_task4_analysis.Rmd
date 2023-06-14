@@ -1,0 +1,125 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Analysis of the Candy data files.
+
+At a first sight it appears clear that the three data files are quite confusing. The names of the columns are not clean and also the structure of the tables doesn't facilitate analysis.
+
+## File's content:
+
+All the three files seems to include data about a certain sample of people and their appreciation/or not of each type of candy.
+
+However, the three tables have not the same columns, so, some data are missing for each year.
+
+
+
+
+1.4.2 Analysis questions
+
+   1. What is the total number of candy ratings given across the three years. (Number of candy ratings, not the number of raters. Don’t count missing values)
+  2.  What was the average age of people who are going out trick or treating?
+  3.  What was the average age of people who are not going trick or treating?
+  4.  For each of joy, despair and meh, which candy bar received the most of these ratings?
+  5.  How many people rated Starburst as despair?
+
+For the next three questions, count despair as -1, joy as +1, and meh as 0.
+
+   6. What was the most popular candy bar by this rating system for each gender in the dataset ?
+   7. What was the most popular candy bar in each year?
+   8. What was the most popular candy bar by this rating for people in US, Canada, UK, and all other countries?
+   
+# Let's start reading our data
+
+
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+clean_candies_2015 <- read_csv(here::here("clean_data/clean_candies-2015.csv"))
+clean_candies_2016 <- read_csv(here::here("clean_data/clean_candies_2016.csv"))
+clean_candies_2017 <- read_csv(here::here("clean_data/clean_candies_2017.csv"))
+```
+Now I am going to match the three data table together
+
+
+```{r}
+candies <- bind_rows(clean_candies_2015, clean_candies_2016, candy_2017)
+```
+
+
+```{r}
+view(candies)
+```
+
+
+#1. What is the total number of candy ratings given across the three years. (Number of candy ratings, not the number of raters. Don’t count missing values)
+
+
+
+```{r}
+candies %>% 
+  group_by(year) %>% 
+  filter(!(is.na(appreciation_rental))) %>% 
+  summarise(n_rating = n())
+```
+
+#  2.  What was the average age of people who are going out trick or treating?
+
+
+
+```{r}
+candies %>% 
+  filter(going_trick == "Yes") %>% 
+  summarise(average_age_trick = mean(age, na.rm =TRUE))
+```
+
+
+#  3.  What was the average age of people who are not going trick or treating?
+
+```{r}
+candies %>% 
+  filter(going_trick == "No") %>% 
+  summarise(average_age_no_trick = mean(age, na.rm =TRUE))
+```
+
+#   4.  For each of joy, despair and meh, which candy bar received the most of these ratings?
+
+
+```{r}
+candies %>% 
+  filter(!(is.na(appreciation_rental))) %>% 
+  group_by(appreciation_rental) %>% 
+  summarise(num = n()) %>% 
+  arrange(desc(num))
+```
+
+#   5.  How many people rated Starburst as despair?
+
+```{r}
+candies %>% 
+  filter(candies == "Starburst" & appreciation_rental == "DESPAIR") %>% 
+  summarise(num_Starburst_despair = n())
+```
+#   6. What was the most popular candy bar by this rating system for each gender in the dataset ?
+
+
+```{r}
+candies %>% 
+  recode(appreciation_rental, "DESPAIR" = -1, +1 = "JOY", 0 = "MEH")
+```
+
+#    7. What was the most popular candy bar in each year?
+
+
+
+#    8. What was the most popular candy bar by this rating for people in US, Canada, UK, and all other countries?
+
+
+
+
+
+

@@ -3,6 +3,7 @@
 ### First of all we read the data files and assign them to variables. In order to work with data files, we need to call the 'tidyverse' library.
 
 library(tidyverse)
+library(stringr)
 
 
 cakes_ingredients <- read_csv("raw_data/cake-ingredients-1961.csv")
@@ -94,6 +95,10 @@ cakes_ingredients_join %>%
 cakes_ingredients_join <- cakes_ingredients_join %>% 
   mutate(measure = coalesce(measure, "cup")) %>% 
   mutate(ingredient = recode(ingredient, "Sour cream cup" = "Sour Cream"))
+
+cakes_ingredients_join <- cakes_ingredients_join %>% 
+  mutate(ingredient = str_to_lower(ingredient))
+
 
 
 

@@ -31,7 +31,7 @@ cakes <- read_csv(here::here("clean_data/cakes.csv"))
 
 ```{r}
 cakes %>% 
-  filter(ingredient == "Cocoa") %>% 
+  filter(ingredient == "cocoa") %>% 
   arrange(desc(dose))
 ```
 
@@ -62,11 +62,19 @@ cakes %>%
 
 ```{r}
 cakes %>% 
-  group_by(ingredient)
+  group_by(ingredient) %>% 
+  count() %>% 
+  arrange(n)
 ```
 
 
 ###  5.Which ingredients are used only once?
 
 
+```{r}
+cakes %>% 
+  group_by(ingredient) %>% 
+  count() %>% 
+  filter(n == 1)
+```
 
