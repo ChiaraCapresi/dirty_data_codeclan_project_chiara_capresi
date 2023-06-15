@@ -1,0 +1,61 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# 1.4 Task 4 - Halloween Candy Data
+
+I started reading the three files and investigating a few of their properties, like 'dim', 'names of columns'...
+
+## These are the cleaning operations that i did to all the three files:
+
+- I changed the names of a few columns I was interested in, using simpler names and equal for all the three dataframes.
+
+- I changed the format of the 'age' column in integer, considering as NAs also all the ages greater than 100 years old.
+
+- I used the 'pivot_longer' function for listing all the candie into a unique column
+
+- I removed the square brackets around the candies' names in the first two datasets and the 'Q6: |' in the third one.
+
+- I selected only the columns I was interested in: "year", "age", "gender", "going_trick", "candies", "appreciation_rating" and "country".
+
+- I checked the NAs, even if I didn't do nothing for any of those, because I think in this case would be better to maintein them as they are.
+
+- I wrote the three cleaned file into a new folder.
+
+### Specific cleaning actions for 'candy_2015':
+
+- I added the columns 'gender' and 'country' which were not present in the original dataset.
+
+- I extracted the year from the Timestamp column and changed the name of the column in year.
+
+### Specific cleaning actions for 'candy_2016':
+
+- I added the column 'gender' which was not present in the original dataset.
+
+- I extracted the year from the Timestamp column and changed the name of the column in year.
+
+- I cleaned the country column by performing the following steps:
+
+  1. converting every country in lower case
+  2. converting every number in NAs
+  3. identifying all the possible denomination for "USA", "UK", "netherlands", "cascadia", converting them into a unique denomination
+  4. identifying any further invalid expression, converting it in NAs
+  5. changing all the country names, a part from "USA" and "UK" in title format.
+  
+## .Rmd Analysis Script.
+
+### I answered to the following questions:
+
+
+
+   1. What is the total number of candy ratings given across the three years. (Number of candy ratings, not the number of raters. Don’t count missing values)
+   2. What was the average age of people who are going out trick or treating?
+   3. What was the average age of people who are not going trick or treating?
+   4. For each of joy, despair and meh, which candy bar received the most of these ratings?
+   5. How many people rated Starburst as despair?
+   6. What was the most popular candy bar by this rating system for each gender in the dataset ?
+   7. What was the most popular candy bar in each year?
+   8. What was the most popular candy bar by this rating for people in US, Canada, UK, and all other countries?
+
+

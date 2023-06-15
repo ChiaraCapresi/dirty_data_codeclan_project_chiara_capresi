@@ -42,9 +42,19 @@ The cake with most Cocoa is the 'One Bowl Chocolate'.
 
 ```{r}
 cakes %>% 
+  filter(cake == "Sponge" & measure == "cup") 
+```
+This is grouped for different ingredients.
+
+
+```{r}
+cakes %>% 
   filter(cake == "Sponge" & measure == "cup") %>% 
   summarise(total_ingr_cups_sponge = sum(dose))
 ```
+
+This is the total amount of cups used for any ingredient in Sponge.
+
 
 ###  3.How many ingredients are measured in teaspoons?
 
@@ -59,12 +69,14 @@ cakes %>%
 ###  4.Which cake has the most unique ingredients?
 
 
-
 ```{r}
 cakes %>% 
-  group_by(ingredient) %>% 
-  count() %>% 
-  arrange(n)
+  select(cake, ingredient)  %>% 
+  group_by(ingredient) %>%
+  count(cake) %>% 
+  arrange(n) %>% 
+  filter(n == 1) %>% 
+  select(cake)
 ```
 
 
@@ -75,6 +87,6 @@ cakes %>%
 cakes %>% 
   group_by(ingredient) %>% 
   count() %>% 
-  filter(n == 1)
+  filter(n == 1) %>% 
+  select(ingredient)
 ```
-

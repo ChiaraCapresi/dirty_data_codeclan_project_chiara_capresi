@@ -47,13 +47,28 @@ Now I am going to match the three data table together
 
 
 ```{r}
-candies <- bind_rows(clean_candies_2015, clean_candies_2016, candy_2017)
+candy <- bind_rows(clean_candies_2015, clean_candies_2016, clean_candies_2017)
+```
+
+```{r}
+#summary(clean_candies_2015)
+```
+
+
+ 
+```{r}
+#view(candy)
 ```
 
 
 ```{r}
-view(candies)
+nrow(clean_candies_2015) + nrow(clean_candies_2016) + nrow(clean_candies_2017)
+nrow(candy)
+dim(candy)
+names(candy)
 ```
+It seems that that matching has been done correctly!!!
+
 
 
 #1. What is the total number of candy ratings given across the three years. (Number of candy ratings, not the number of raters. Don’t count missing values)
@@ -61,27 +76,27 @@ view(candies)
 
 
 ```{r}
-candies %>% 
+candy %>% 
   group_by(year) %>% 
-  filter(!(is.na(appreciation_rental))) %>% 
-  summarise(n_rating = n())
+  filter(!(is.na(appreciation_rating))) %>% 
+  summarise(n_ratings_per_year = n())
 ```
 
 #  2.  What was the average age of people who are going out trick or treating?
 
 
-
 ```{r}
-candies %>% 
+candy %>% 
   filter(going_trick == "Yes") %>% 
   summarise(average_age_trick = mean(age, na.rm =TRUE))
+
 ```
 
 
 #  3.  What was the average age of people who are not going trick or treating?
 
 ```{r}
-candies %>% 
+candy %>% 
   filter(going_trick == "No") %>% 
   summarise(average_age_no_trick = mean(age, na.rm =TRUE))
 ```
@@ -90,34 +105,78 @@ candies %>%
 
 
 ```{r}
-candies %>% 
-  filter(!(is.na(appreciation_rental))) %>% 
-  group_by(appreciation_rental) %>% 
+candy %>% 
+  filter(!(is.na(appreciation_rating)) & str_detect(candies, "bar")) %>% 
+  group_by(appreciation_rating, candies) %>% 
   summarise(num = n()) %>% 
-  arrange(desc(num))
+  slice_max(num)
 ```
+
+
+
 
 #   5.  How many people rated Starburst as despair?
 
 ```{r}
-candies %>% 
-  filter(candies == "Starburst" & appreciation_rental == "DESPAIR") %>% 
+candy %>% 
+  filter(candies == "Starburst" & appreciation_rating == "DESPAIR" & ((!(is.na(age)) | (!(is.na(gender)))))) %>% 
   summarise(num_Starburst_despair = n())
 ```
-#   6. What was the most popular candy bar by this rating system for each gender in the dataset ?
+#For the next three questions, count despair as -1, joy as +1, and meh as 0.
 
 
 ```{r}
-candies %>% 
-  recode(appreciation_rental, "DESPAIR" = -1, +1 = "JOY", 0 = "MEH")
+ candy <- candy %>% 
+  #select(appreciation_rating) %>% 
+  mutate(numeric_rating = case_when(
+    appreciation_rating == "DESPAIR" ~ -1,
+    appreciation_rating == "JOY" ~ +1,
+    appreciation_rating == "MEH" ~ 0
+  ))
+  
 ```
+
+
+
+#   6. What was the most popular candy bar by this rating system for each gender in the dataset ?
+
+
+
+
+```{r}
+candy %>% 
+  filter(!(is.na(numeric_rating)) & !(is.na(gender)) & str_detect(candies, "bar")) %>% 
+  group_by(gender, candies) %>% 
+  summarise(most_pop_per_gender = sum(numeric_rating)) %>% 
+  slice_max(most_pop_per_gender)
+```
+
 
 #    7. What was the most popular candy bar in each year?
 
 
 
+```{r}
+candy %>% 
+  filter(str_detect(candies, "bar") & (!is.na(numeric_rating))) %>%
+  group_by(year, candies) %>% 
+  summarise(ratings_candybar_per_year = sum(numeric_rating)) %>% 
+  slice_max(ratings_candybar_per_year)
+
+```
+
+
 #    8. What was the most popular candy bar by this rating for people in US, Canada, UK, and all other countries?
 
+
+```{r}
+candy %>% 
+  mutate(country = if_else((!(country %in% c("USA", "Canada", "UK"))), "others", country)) %>% 
+  filter(str_detect(candies, "bar") & (!is.na(numeric_rating))) %>% 
+  group_by(country, candies) %>% 
+  summarise(ratings_candybar_per_country = sum(numeric_rating)) %>% 
+  slice_max(ratings_candybar_per_country) 
+```
 
 
 

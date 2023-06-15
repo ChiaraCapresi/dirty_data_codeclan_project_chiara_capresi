@@ -1,0 +1,69 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# 1.2 Task 2 - Cake ingredients
+
+
+First of all in a .R script I proceeded to clean the data.
+
+I started calling the 'tidyverse' library and reading the files, assigning them to variables 'cakes_ingredients' and 'cake-ingredient_code'.
+
+## First considerations on the two datasets:
+
+### cakes_ingredients
+
+
+. As a first consideration I see that the names of the columns are not clean: the first column ('Cake') starts with a capitol letter, so it is not in snake-case. For what concerns the other columns, they are named only with two capital letters, that presumably represent the initials of the ingredients.
+
+. At first glance it is also evident that there are many NAs in the data table.
+
+. 18 rows and 35 columns
+
+. It seems that there are NAs in all the columns a part from 'Cake'.
+
+
+###cake_ingredient_code
+
+It seems that the column's names in the 'cakes_ingredients' file represent exactly the code of the ingredients. The table 'cake_ingredient_code', contains the column 'code' which contains the code of the ingredients, the column 'ingredient' which contains their names and the column 'measure' which specify the unit of measurement that is used for dosing them.
+
+
+## Cleaning changes:
+
+- 'cake_ingredient_code' seems fine!
+
+Let's condìsider the 'cakes_ingredients' file.
+
+- I changed the name of the first column in lower case.
+
+- I checked that the only logical column of the dataset has only NAs so I can convert it in double withot losing informations.
+
+- I applied a pivot_longer for having all the ingredients in a unique column.
+
+- I joined the two dataframes
+
+- I checked foe NAs and dealt with them
+
+- I changed the ingredient's names in lower case.
+
+- I wrote the cleaned dataframe into a new folder.
+
+## Finally, I answered to the following questions:
+
+
+   1. Which cake has the most cocoa in it?
+   2. For sponge cake, how many cups of ingredients are used in total?
+   3. How many ingredients are measured in teaspoons?
+   4. Which cake has the most unique ingredients?
+   5. Which ingredients are used only once?
+
+
+
+
+
+
+
+
+
+

@@ -17,10 +17,8 @@ names(candy_2015)
 names(candy_2016)
 names(candy_2017)
 
-
 #view(candy_2015)
-#view(candy_2016)
-#view(candy_2017)
+
 
 glimpse(candy_2015)
 
@@ -39,56 +37,72 @@ glimpse(candy_2017)
 
 # candy_2015 file.
 
-### At first sight, it seems that in this file the first point to cover for cleaning data are: 1) ix the format of the first two columns 2) apply a pivot_longer for all the columns from the fourth on listing all the candy's names.
+### We start giving to the first three columns simpler and more identifiable names. I will not use the 'clean_name' function because it would remove the '[' ']' around the names of the candies that could be useful later. Furthermore, I would change the names in a shorter and simpler format.
 
-# We start giving to the first three columns simpler and more identifiable names. I will not use the 'clean_name' function because it would remove the '[' ']' around the names of the candies that could be useful later. Furthermore, I would change the names in a shorter and simpler format.
+
+
 
 candy_2015 <- candy_2015 %>% 
   rename("age" = "How old are you?", "timestamp" = "Timestamp", "going_trick" = "Are you going actually going trick or treating yourself?")
-  
+
 
 candy_2015 <- candy_2015 %>% 
-  mutate(age = as.integer(age))
+  mutate(gender = "unknown", .after = age) %>% 
+  mutate(gender = na_if(gender, "unknown"))
 
 
-#####################
+
+candy_2015 <- candy_2015 %>% 
+  mutate(country = "unknown") %>% 
+  mutate(country = na_if(country, "unknown"))
+
+
+
+
+  
+### I change the format of the age columns in integer, in such a way that, character values that wouldn't mean nothing will be considered as NAs.
+### I also assume not to consider as a valid value, ages greater than 100 years old.
+
+
+candy_2015 <- candy_2015 %>% 
+  mutate(age = as.integer(age)) %>% 
+  mutate(age = if_else(age >= 100, na_if(age, age), age))
+
+### I am interested only in the year, so I extract it from the timestamp table.
+
+
 candy_2015 <- candy_2015 %>% 
   mutate(year = as.numeric(format(timestamp,'%Y')))
 
 
-candy_2015 <- candy_2015 %>% 
-  select(year, age, going_trick, starts_with("["))
-
-#view(candy_2015)
-
+### I ma going to apply a pivot_longer function for comparing the ratings for each different candy. 
 
 candy_2015 <- candy_2015 %>% 
   pivot_longer(cols = starts_with("["),
                names_to = "candies",
-               values_to = "appreciation_rental")
+               values_to = "appreciation_rating")
 
 
 candy_2015 <- candy_2015 %>% 
   mutate(candies = str_remove(candies, "\\[")) %>% 
-  mutate(candies = str_remove(candies, "\\]"))
-
-
-
-
-#######################
-
-
-
-
-
-#candy_2015[, c("timestamp", "age", "going_trick", "candies", "appreciation_rental")]
+  mutate(candies = str_remove(candies, "\\]")) 
   
 
-  ###############################
+
+### I only select the columns I am interested in.
+
+candy_2015 <- candy_2015 %>% 
+  select(year, age, gender, going_trick, candies, appreciation_rating, country)
+
+### I check the NAs but I decide, for the aim of our questions, not to do anything for those. The same holds for the other tables.
+
+
 candy_2015 %>% 
   summarise(across(.col = everything(), .fns = ~sum(is.na(.x))))
-# There are NAs in the columns 'age', 'appreciation_rental'.
+### There are NAs in the columns 'age', 'appreciation_rating'.
 
+
+## Finally, I write the new cleaned data file into a separate folder.
 
 write_csv(candy_2015, "clean_data/clean_candies-2015.csv")
 
@@ -105,20 +119,24 @@ write_csv(candy_2015, "clean_data/clean_candies-2015.csv")
   rename("timestamp" = "Timestamp", "gender" = "Your gender:", "going_trick" = "Are you going actually going trick or treating yourself?", "age" = "How old are you?", "country" = "Which country do you live in?", "state" = "Which state, province, county do you live in?")
 
  
- #view(candy_2016)
-
-### I am going to change the data type in the "age" column converting it to integer! This will create a few NAs but, it's ok because everything there that cannot be converted in an integer is not a significant value.
+### I am going to change the data type in the "age" column converting it to integer! This will create a few NAs but, it's ok because everything there that cannot be converted in an integer is not a significant value. Again I will not consider  ages greater than 100.
  
  candy_2016 <- candy_2016 %>% 
-   mutate(age = as.integer(age))
+   mutate(age = as.integer(age)) %>% 
+   mutate(age = if_else(age >= 100, na_if(age, age), age))
+ 
+ candy_2016 <- candy_2016 %>% 
+   mutate(gender = na_if(gender, "I'd rather not say")) %>% 
+   mutate(gender = na_if(gender, "Other"))
+ 
  
  candy_2016 <- candy_2016 %>% 
    mutate(year = as.numeric(format(timestamp,'%Y')))
 
  candy_2016 <- candy_2016 %>% 
-   select(year, age, gender, country, state, going_trick, starts_with("["))
+   select(year, age, gender, country, going_trick, starts_with("["))
  
- ### Let's analyse the country column:
+ ## Let's analyse the 'country' column:
  
  
  ### First of all I would like to convert all the countries in lower case, so that I will have less cases to deal with.
@@ -126,17 +144,12 @@ write_csv(candy_2015, "clean_data/clean_candies-2015.csv")
  candy_2016 <- candy_2016 %>% 
    mutate(country = str_to_lower(country))
  
- 
  ### Now I want to change any different denomination of a same country with a unique one.
  
  ### Let's have a look of the different denominations
  
-distinct_2016_countries <- candy_2016 %>% 
-   distinct(country)
-
-view(distinct_2016_countries)
-
-
+candy_2016 %>%
+distinct(country)
 
 ### Let's start replacing numbers with NAs 
 
@@ -144,27 +157,24 @@ candy_2016 <- candy_2016 %>%
   mutate(country = if_else(str_detect(country, "[1-9]"), "number", country)) %>% 
   mutate(country = na_if(country, "number"))
 
-
 ### USA
 
 candy_2016 <- candy_2016 %>% 
-  mutate(country = if_else(str_detect(country, "^u[sn. ]"), "USA", country)) %>% 
+  mutate(country = if_else(str_detect(country, "^u[s. ]"), "USA", country)) %>% 
   mutate(country = if_else(str_detect(country, "rica$"), "USA", country)) %>% 
-  mutate(country = if_else(str_detect(country, "^u[sn.]"), "USA", country)) %>% 
   mutate(country = if_else(str_detect(country, "the united states"), "USA", country)) %>% 
   mutate(country = if_else(str_detect(country, "usa"), "USA", country))
-
 
 ### UK
 
 candy_2016 <- candy_2016 %>% 
-  mutate(country = if_else(country %in% c("uk", "england"), "UK", country))  
+  mutate(country = if_else(country %in% c("uk", "england", "united kingdom"), "UK", country))  
 
 ### Netherlands
 candy_2016 <- candy_2016 %>% 
-  mutate(country = if_else(str_detect(country, "the netherlands"), "natherlands", country))
+  mutate(country = if_else(str_detect(country, "the netherlands"), "netherlands", country))
 
-
+### Cascadia
 
 candy_2016 <- candy_2016 %>% 
   mutate(country = if_else(str_detect(country, "cascadia"), "cascadia", country))
@@ -180,66 +190,84 @@ candy_2016 <- candy_2016 %>%
  mutate(country = if_else(country %in% c("somewhere", "eua", "see above"), "invalid", country)) %>% 
   mutate(country = na_if(country, "invalid"))
 
+### Finally, a part from "USA" and "UK" that I want to maintain in upper case, I change the format of all the other Countries in Title format.
+
+candy_2016 <- candy_2016 %>% 
+     mutate(country = case_when(
+       country == "USA" ~country,
+       country == "UK" ~country,
+       TRUE           ~str_to_title(country)
+     )) 
 
 ### pivot_longer
 
 candy_2016 <- candy_2016 %>% 
   pivot_longer(cols = starts_with("["),
                names_to = "candies",
-               values_to = "appreciation_rental")
+               values_to = "appreciation_rating")
 
 candy_2016 <- candy_2016 %>% 
   mutate(candies = str_remove(candies, "\\[")) %>% 
   mutate(candies = str_remove(candies, "\\]"))
 
-#view(candy_2017)
+### Checking of the NAs.
 
 
 candy_2016 %>% 
   summarise(across(.col = everything(), .fns = ~sum(is.na(.x))))
 
-## It seems there are NAs in the columns 'age', 'gender', 'country' 'state' appreciation_rental'
+### It seems there are NAs in the columns 'age', 'gender', 'country' 'state' appreciation_rental'
 
+
+## I write the cleaned file into the new folder.
 
 write_csv(candy_2016, "clean_data/clean_candies_2016.csv")
+
+
+
 
 # candy_2017
  
  
  
  candy_2017 <- candy_2017 %>% 
-   rename("going_trick" = starts_with("Q1:"), "age" = starts_with("Q3"), "country" = starts_with("Q4"), "state" = starts_with("Q5"), "gender" = starts_with("Q2"), "year" = "Internal ID")
+   rename("going_trick" = starts_with("Q1:"), "age" = starts_with("Q3"), "country" = starts_with("Q4"), "state" = starts_with("Q5"), "gender" = starts_with("Q2"))
+ 
+ 
+###candy_2017 doesn't have a 'year' column, so I create one for it. 
  
  candy_2017 <- candy_2017 %>% 
-   mutate(year = recode(year, .default = 2017))
+   mutate(year = 2017, .before = age)
  
- 
- #view(candy_2017)
  
  
  candy_2017 <- candy_2017 %>% 
-   select(year, age, gender, country, state, going_trick, starts_with("Q6"))
+   mutate(age = as.integer(age)) %>% 
+   mutate(age = if_else(age >= 100, na_if(age, age), age))
+ 
+ 
+ candy_2017 <- candy_2017 %>% 
+   mutate(gender = na_if(gender, "I'd rather not say")) %>% 
+   mutate(gender = na_if(gender, "Other"))
+ 
+
+ 
+ candy_2017 <- candy_2017 %>% 
+   select(year, age, gender, country, going_trick, starts_with("Q6"))
  
  
  
  candy_2017 <- candy_2017 %>% 
    pivot_longer(cols = starts_with("Q6"),
                 names_to = "candies",
-                values_to = "appreciation_rental")
+                values_to = "appreciation_rating")
  
  candy_2017 <- candy_2017 %>% 
    mutate(candies = str_remove(candies, "Q6")) %>% 
    mutate(candies = str_remove(candies, "\\|")) 
  
  
- 
- 
-
- candy_2017 <- candy_2017 %>% 
-   mutate(age = as.integer(age))
- 
- 
- 
+ ### Let's analyse the 'country' column.
 
 
  candy_2017 <- candy_2017 %>% 
@@ -247,9 +275,8 @@ write_csv(candy_2016, "clean_data/clean_candies_2016.csv")
 
 
 
-#view(candy_2017)
 
-### We are going to canvert numbers in NAs
+### We are going to convert numbers in NAs
 
 candy_2017 <- candy_2017 %>% 
   mutate(country = if_else(str_detect(country, "[1-9]"), "number", country)) %>% 
@@ -257,7 +284,7 @@ candy_2017 <- candy_2017 %>%
 
 
 candy_2017 <- candy_2017 %>% 
-  mutate(country = if_else(str_detect(country, "^u[sn. ]"), "USA", country)) %>% 
+  mutate(country = if_else(str_detect(country, "^u[s. ]"), "USA", country)) %>% 
   mutate(country = if_else(str_detect(country, "rica$"), "USA", country)) %>% 
   mutate(country = if_else(str_detect(country, "^u[sn.]"), "USA", country)) %>% 
   mutate(country = if_else(str_detect(country, "the united states"), "USA", country))
@@ -265,11 +292,11 @@ candy_2017 <- candy_2017 %>%
 ### UK
 
 candy_2017 <- candy_2017 %>% 
-  mutate(country = if_else(country %in% c("uk", "england"), "UK", country))  
+  mutate(country = if_else(country %in% c("uk", "england", "united kingdom"), "UK", country))  
 
 ### Netherlands
 candy_2017 <- candy_2017 %>% 
-  mutate(country = if_else(str_detect(country, "the netherlands"), "natherlands", country))
+  mutate(country = if_else(str_detect(country, "the netherlands"), "netherlands", country))
 
 
 ### Other invalid names
@@ -280,27 +307,44 @@ candy_2017 <- candy_2017 %>%
   mutate(country = if_else(country %in% c("earth", "insanity lately", "can", "i don't know anymore", "fear and loathing", "narnia", "uae", "canae", "ud"), "invalid", country)) %>% 
   mutate(country = na_if(country, "invalid"))
 
+
+
+
+candy_2017 <- candy_2017 %>% 
+  mutate(country = case_when(
+    country == "USA" ~country,
+    country == "UK" ~country,
+    TRUE           ~str_to_title(country)
+  )) 
+
+
+
 candy_2017 %>% 
   summarise(across(.col = everything(), .fns = ~sum(is.na(.x))))
 
-#There are NAs in the columns 'age', 'gender', 'country', 'state', going_trick' and 'appreciation_rental'
+###There are NAs in the columns 'age', 'gender', 'country', 'state', going_trick' and 'appreciation_rental'
+
+## Finally, I write the cleaned file into the new folder.
 
 
 write_csv(candy_2017, "clean_data/clean_candies_2017.csv")
 
 
-#view(candy_2017)
 
 
 
 
 
-distinct_2017_countries <- candy_2017 %>% 
-  distinct(country)
-
-view(distinct_2017_countries)
 
 
 
 
-view(candy_2017)
+
+
+
+
+
+
+
+
+
