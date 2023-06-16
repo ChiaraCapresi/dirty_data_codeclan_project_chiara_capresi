@@ -71,13 +71,16 @@ cakes %>%
 
 ```{r}
 cakes %>% 
-  select(cake, ingredient)  %>% 
+  select(cake, ingredient) %>% 
   group_by(ingredient) %>%
-  count(cake) %>% 
-  arrange(n) %>% 
-  filter(n == 1) %>% 
-  select(cake)
+  summarise(ingr_unique = n()) %>% 
+  slice_min(ingr_unique)
 ```
+
+
+
+
+
 
 
 ###  5.Which ingredients are used only once?
@@ -86,7 +89,7 @@ cakes %>%
 ```{r}
 cakes %>% 
   group_by(ingredient) %>% 
-  count() %>% 
-  filter(n == 1) %>% 
+  summarise(ingr_use = n()) %>% 
+  filter(ingr_use == 1) %>% 
   select(ingredient)
 ```
