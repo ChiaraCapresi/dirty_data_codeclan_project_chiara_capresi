@@ -10,6 +10,7 @@ library(tidyverse)
 
 cakes_ingredients <- read_csv("raw_data/cake-ingredients-1961.csv")
 
+#view(cakes_ingredients)
 
 #### As a first consideration I see that the names of the columns are not clean: the first column ('Cake') starts with a capitol letter, so it is not in snake-case. For what concerns the other columns, they are named only with two capital letters, that presumably represent the initials of the ingredients.
 #### At first glance it is also evident that there are many NAs in the data table.
@@ -19,6 +20,9 @@ cakes_ingredients <- read_csv("raw_data/cake-ingredients-1961.csv")
 ### Let's have a look also to the other file!
 
 cake_ingredient_code <- read_csv("raw_data/cake_ingredient_code.csv")
+
+#view(cake_ingredient_code)
+
 
 
 #### It seems that the column's names in the 'cakes_ingredients' file represent exactly the code of the ingredients. The table 'cake_ingredient_code', contains the column 'code' which contains the code of the ingredients, the column 'ingredient' which contains their names and the column 'measure' which specify the unit of measurement that is used for dosing them.
@@ -35,7 +39,7 @@ names(cakes_ingredients)
 
 glimpse(cakes_ingredients)
 
-#### All the columns are of type 'double', with the exceptions of the first column 'Cake' which is of type character and the third column 'BM' which is logical.
+<- <- <- <- <- <- <- <- #### All the columns are of type 'double', with the exceptions of the first column 'Cake' which is of type character and the third column 'BM' which is logical.
 
 
 cakes_ingredients %>% 
@@ -64,6 +68,8 @@ cakes_ingredients <- cakes_ingredients %>%
   pivot_longer(cols = -cake, names_to = "code", values_to = "dose") %>% 
   filter(!(is.na(dose)))
 
+view(cakes_ingredients)
+
 
 ### Now we would like to change the code of the ingredients with their exact name. For doing so, we should join the 'cake_ingredients' table with 'cake_ingredient_code'.
 
@@ -80,6 +86,8 @@ cakes_ingredients_join <- cakes_ingredients_join[, c("cake", "ingredient", "code
 
 cakes_ingredients_join %>% 
   summarise(across(.col = everything(), .fns = ~sum(is.na(.x))))
+
+view(cakes_ingredients_join)
 
 #### There are only 4 NAs in the measure column, let's see where they are.
 
