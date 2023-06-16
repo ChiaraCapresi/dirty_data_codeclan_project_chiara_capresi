@@ -73,8 +73,9 @@ cakes %>%
 cakes %>% 
   select(cake, ingredient) %>% 
   group_by(ingredient) %>%
-  summarise(ingr_unique = n()) %>% 
-  slice_min(ingr_unique)
+  summarise(ingr_unique = n(), cake = cake) %>%
+  arrange(ingr_unique) %>% 
+  select(cake)
 ```
 
 
